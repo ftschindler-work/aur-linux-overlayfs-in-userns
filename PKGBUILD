@@ -1,6 +1,7 @@
-# Maintainer: Philip Müller <philm[at]manjaro[dot]org>
-# Maintainer: Bernhard Landauer <bernhard[at]manjaro[dot]org>
-# Maintainer: Helmut Stult <helmut[at]manjaro[dot]org>
+# Maintainer: Felix Schindler <aut at felixschindler dot net>
+# Contributor: Philip Müller <philm[at]manjaro[dot]org>
+# Contributor: Bernhard Landauer <bernhard[at]manjaro[dot]org>
+# Contributor: Helmut Stult <helmut[at]manjaro[dot]org>
 
 # Arch credits:
 # Tobias Powalowski <tpowa@archlinux.org>
@@ -16,7 +17,7 @@ _basekernel=5.4
 _basever=54
 _aufs=20200622
 pkgver=5.4.70
-pkgrel=1
+pkgrel=1.5
 arch=('x86_64')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -79,7 +80,9 @@ source=("https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.x
         '0510-bootsplash.patch'
         '0511-bootsplash.patch'
         '0512-bootsplash.patch'
-        '0513-bootsplash.gitpatch')
+        '0513-bootsplash.gitpatch'
+        # my patches
+        'overlayfs-permit-mounts-in-userns.patch')
 sha256sums=('bf338980b1670bca287f9994b7441c2361907635879169c64ae78364efc5f491'
             '2ade7821666221ce0dd4c6822cb76ae4cd8c335fc1d094581aca2be519d7819c'
             '1f2f2099c1244a02affb2cbab6de31804ed75b5ed6982ffd39fa2252acaf8787'
@@ -124,7 +127,8 @@ sha256sums=('bf338980b1670bca287f9994b7441c2361907635879169c64ae78364efc5f491'
             'e9f22cbb542591087d2d66dc6dc912b1434330ba3cd13d2df741d869a2c31e89'
             '27471eee564ca3149dd271b0817719b5565a9594dc4d884fe3dc51a5f03832bc'
             '60e295601e4fb33d9bf65f198c54c7eb07c0d1e91e2ad1e0dd6cd6e142cb266d'
-            '035ea4b2a7621054f4560471f45336b981538a40172d8f17285910d4e0e0b3ef')
+            '035ea4b2a7621054f4560471f45336b981538a40172d8f17285910d4e0e0b3ef'
+            'b4e34582fd2ff1fab648be62796c2e4bbcf86c800adb600041d7b5d6651c725c')
 prepare() {
   cd "${srcdir}/linux-${_basekernel}"
 
@@ -184,7 +188,7 @@ build() {
 }
 
 package_linux54() {
-  pkgdesc="The ${pkgbase/linux/Linux} kernel and modules"
+  pkgdesc="The ${pkgbase/linux/Linux} kernel and modules (with overlayfs-in-user-namespace patch)"
   depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=27')
   optdepends=('crda: to set the correct wireless channels of your country')
   provides=("linux=${pkgver}")
@@ -229,7 +233,7 @@ package_linux54() {
 }
 
 package_linux54-headers() {
-  pkgdesc="Header files and scripts for building modules for ${pkgbase/linux/Linux} kernel"
+  pkgdesc="Header files and scripts for building modules for ${pkgbase/linux/Linux} kernel (with overlayfs-in-user-namespace patch)"
   provides=("linux-headers=$pkgver")
 
   cd "${srcdir}/linux-${_basekernel}"
